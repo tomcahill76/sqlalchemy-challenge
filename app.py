@@ -51,14 +51,14 @@ query_date = dt.date(2017, 8, 23) - dt.timedelta(days=365)
 def prcp():
     # Create our session (link) from Python to the DB
     session = Session(engine)
-    List = []
+    output_list = []
     prcp_results = session.query(Measurement.date, Measurement.prcp).filter(Measurement.date >= query_date).all()
     for x in prcp_results:
         data = {}
-        data["date"] = Measurement.date
-        data["prcp"] = Measurement.prcp
-        List.append(data)
-    return jsonify(List)
+        data["date"] = x.date
+        data["prcp"] = x.prcp
+        output_list.append(data)
+    return jsonify(output_list)
 
 @app.route('/api/v1.0/stations')
 def stations():
@@ -80,7 +80,6 @@ def temp():
     return jsonify(Temp_list)
 
 @app.route('/api/v1.0/<start>')
-
 def temp_details(start):
      # Create our session (link) from Python to the DB
     session = Session(engine)
@@ -92,7 +91,6 @@ def temp_details(start):
     return jsonify(Temp_summary_List)
 
 @app.route('/api/v1.0/<start>/<end>')
-
 def calc_temps(start, end):
     session = Session(engine)
     
